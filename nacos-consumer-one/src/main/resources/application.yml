@@ -1,0 +1,32 @@
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+server:
+    port: 18083
+spring:
+    application:
+        name: service-consumer
+    cloud:
+        nacos:
+            discovery:
+                server-addr: 127.0.0.1:8848
+        sentinel:
+            datasource:
+                ds1:
+                    file:
+                        data-type: json
+                        file: 'classpath: flowrule.json'
+                        rule-type: flow
+                ds2:
+                    file:
+                        data-type: json
+                        file: 'classpath: degraderule.json'
+                        rule-type: degrade
+            eager: true
+            transport:
+                dashboard: localhost:8080
+feign:
+    sentinel:
+        enabled: true
