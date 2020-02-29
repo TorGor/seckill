@@ -1,0 +1,24 @@
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+server:
+    port: 18080
+
+spring:
+    application:
+        name: service-gateway
+    cloud:
+        gateway:
+            routes:
+            -   filters:
+                - StripPrefix=1
+                id: nacos-route
+                uri: lb://service-provider
+                predicates:
+                -   args[pattern]: /nacos/**
+                    name: Path
+        nacos:
+            discovery:
+                server-addr: 127.0.0.1:8848

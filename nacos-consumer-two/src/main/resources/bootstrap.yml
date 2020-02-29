@@ -1,0 +1,54 @@
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+server:
+    port: 18088
+spring:
+    application:
+        name: service-consumer
+    cloud:
+        nacos:
+            discovery:
+              server-addr: 127.0.0.1:8848
+            config:
+              server-addr: 127.0.0.1:8848
+              group: DEFAULT_GROUP
+              refreshable-dataids: common.properties
+              shared-dataids: common.properties
+#              file-extension:
+        sentinel:
+            datasource:
+                ds1:
+                    file:
+                        data-type: json
+                        file: 'classpath: flowrule.json'
+                        rule-type: flow
+                ds2:
+                    file:
+                        data-type: json
+                        file: 'classpath: degraderule.json'
+                        rule-type: degrade
+            eager: true
+            transport:
+                dashboard: localhost:8080
+    redis:
+      lettuce:
+        pool:
+          max-active: 100
+          max-idle: 10
+          min-idle: 5
+      cluster:
+        nodes:
+          - 192.168.244.88:7000
+          - 192.168.244.88:7001
+          - 192.168.244.88:7002
+          - 192.168.244.88:7003
+          - 192.168.244.88:7004
+          - 192.168.244.88:7005
+        max-redirects: 3
+
+feign:
+    sentinel:
+        enabled: true

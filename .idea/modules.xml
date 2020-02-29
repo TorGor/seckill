@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/nacos-consumer-one/nacos-consumer.iml" filepath="$PROJECT_DIR$/nacos-consumer-one/nacos-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nacos-consumer-two/nacos-consumer-two.iml" filepath="$PROJECT_DIR$/nacos-consumer-two/nacos-consumer-two.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nacos-gateway/nacos-gateway.iml" filepath="$PROJECT_DIR$/nacos-gateway/nacos-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/nacos-providor/nacos-providor.iml" filepath="$PROJECT_DIR$/nacos-providor/nacos-providor.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/spring-cloud-alibaba-seckill.iml" filepath="$PROJECT_DIR$/.idea/spring-cloud-alibaba-seckill.iml" />
     </modules>

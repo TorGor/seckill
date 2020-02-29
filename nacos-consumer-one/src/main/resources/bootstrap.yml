@@ -1,0 +1,65 @@
+management:
+    endpoints:
+        web:
+            exposure:
+                include: '*'
+server:
+    port: 18083
+spring:
+    application:
+        name: service-consumer
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.244.88:3306/seckill?useunicode=true&characterEncoding=utf8
+        username: root
+        password: Qaz123!@
+    cloud:
+        nacos:
+            discovery:
+              server-addr: 127.0.0.1:8848
+            config:
+              server-addr: 127.0.0.1:8848
+              group: DEFAULT_GROUP
+              refreshable-dataids: common.properties
+              shared-dataids: common.properties
+#              file-extension:
+        sentinel:
+            datasource:
+                ds1:
+                    file:
+                        data-type: json
+                        file: 'classpath: flowrule.json'
+                        rule-type: flow
+                ds2:
+                    file:
+                        data-type: json
+                        file: 'classpath: degraderule.json'
+                        rule-type: degrade
+            eager: true
+            transport:
+                dashboard: localhost:8080
+    redis:
+      lettuce:
+        pool:
+          max-active: 100
+          max-idle: 10
+          min-idle: 5
+      cluster:
+        nodes:
+          - 192.168.244.88:7000
+          - 192.168.244.88:7001
+          - 192.168.244.88:7002
+          - 192.168.244.88:7003
+          - 192.168.244.88:7004
+          - 192.168.244.88:7005
+        max-redirects: 3
+
+feign:
+    sentinel:
+        enabled: true
+mybatis:
+  type-aliases-package: com.holy.nacosconsumerone.entity
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    # 开启驼峰命名转换，如：Table(create_time) -> Entity(createTime)。不需要我们关心怎么进行字段匹配，mybatis会自动识别`大写字母与下划线`
+    map-underscore-to-camel-case: true

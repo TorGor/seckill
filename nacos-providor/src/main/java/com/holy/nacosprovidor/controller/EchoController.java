@@ -25,7 +25,7 @@ class EchoController {
     @GetMapping(value = "/sleep")
     public String sleep() {
         try {
-            Thread.sleep(1000L);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

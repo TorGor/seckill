@@ -1,6 +1,8 @@
 package com.holy.nacosconsumerone.controller;
 
 import com.holy.nacosconsumerone.service.EchoService;
+import com.holy.nacosconsumerone.utils.RedisLock;
+import com.holy.nacosconsumerone.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,8 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 /**
- * @author xiaojing
+ * @author holy
  */
 @RestController
 public class TestController {
@@ -26,6 +33,12 @@ public class TestController {
 
 	@Autowired
 	private DiscoveryClient discoveryClient;
+
+	@Resource
+	private RedisUtils redisUtil;
+
+	@Resource
+	private RedisLock redisLock;
 
 	// @PostConstruct
 	// public void init() {
@@ -83,6 +96,11 @@ public class TestController {
 		return echoService.echo(str);
 	}
 
+	@GetMapping(value = "/sleep-feign")
+	public String sleepFeign() {
+		return echoService.sleep();
+	}
+
 	@GetMapping(value = "/services/{service}")
 	public Object client(@PathVariable String service) {
 		return discoveryClient.getInstances(service);
@@ -92,4 +110,23 @@ public class TestController {
 	public Object services() {
 		return discoveryClient.getServices();
 	}
+
+	@GetMapping(value = "/redisTest")
+	public Object redisTest() {
+		redisLock.tryLock("lockKey","888",10,TimeUnit.SECONDS);
+		int i = 10 ;
+		Map<String,Object> map = new HashMap<>();
+		while (i > 0 ){
+//			UserInfo userInfo = new UserInfo();
+//			userInfo.setUsername("holy"+i);
+//			userInfo.setAge(i);
+			map.put("holy"+i,i+"0000");
+			i--;
+		}
+		redisUtil.hmset("map",map);
+		System.out.println("lockKey:" + redisLock.get("lockKey"));
+
+		return redisUtil.hmget("map");
+	}
+
 }
